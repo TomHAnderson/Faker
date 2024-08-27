@@ -4,7 +4,6 @@ namespace Faker\ORM\Doctrine;
 
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Faker\Generator;
-use ReflectionEnum;
 
 require_once 'backward-compatibility.php';
 
@@ -26,13 +25,15 @@ class ColumnTypeGuesser
 
         // Handle backed enum field
         $enumType = $class->fieldMappings[$fieldName]['enumType'] ?? null;
+
         if ($enumType) {
-            $reflectionEnum = new ReflectionEnum($enumType);
+            $reflectionEnum = new \ReflectionEnum($enumType);
 
             $values = [];
+
             foreach ($reflectionEnum->getConstants() as $constant) {
                 $values[] = $constant->value;
-            };
+            }
 
             return $generator->randomElement($values);
         }
